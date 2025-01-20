@@ -3,12 +3,15 @@ const mongoose = require("mongoose");
 const app = express();
 const port = 5001;
 const logger = require("./middleware/logMiddleware");
-const dburl = "mongodb://localhost:27017/";
+// const dburl = "mongodb://localhost:27017/";
+const clouddburl = "mongodb+srv://roshanchaudhari1872002:vpIuuwADIZpUNuWw@cluster0.3fcjz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const User = require("./models/userModels");
 
-mongoose.connect(dburl, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+app.use(express.json());
+
+app.use(logger);
+
+mongoose.connect(clouddburl)
     .then(() => {
         console.log("Connected to MongoDB");
     })
@@ -16,10 +19,20 @@ mongoose.connect(dburl, {
         console.log(err);
     })
 
-app.use(logger);
 
 app.get("/users", (req, res) => {
     res.send("All Users");
+})
+
+app.post("/users/:id", async (req, res) => {
+    const user = req.body;
+    try {
+        const addeduser = await User.create(user);
+        res.send(`Create User with id: ${addeduser}`);
+    }
+    catch (err) {
+        console.log(err);
+    }
 })
 
 app.get('/', (req, res) => {
