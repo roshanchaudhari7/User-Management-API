@@ -19,10 +19,6 @@ mongoose.connect(clouddburl)
         console.log(err);
     })
 
-app.get("/users", (req, res) => {
-    res.send("All Users");
-})
-
 app.use("/", userRoutes);
 
 app.listen(port, () => {

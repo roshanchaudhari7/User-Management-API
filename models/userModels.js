@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: [true, "Username is Required!"],
-        caseSensitive: [false, "Keep the username in lowercase only"],
+        caseSensitive: [true, "Keep the username in lowercase only"],
         trim: [true, "Please Make sure there are no extra spaces"],
         minLength: [3, "Choose a longer username"],
         maxLength: [10, "Choose a shorter username"]
