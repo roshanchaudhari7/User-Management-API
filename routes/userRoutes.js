@@ -8,12 +8,34 @@ router.get('/', (req, res) => {
     res.send("<h1>User Management API</h1> <br/><p> We have built this Api for User Management through node and express</p>");
 })
 
-// add users
-router.post("/users/:id", async (req, res) => {
+// signup
+router.post("/users/signup", async (req, res) => {
     const user = req.body;
     try {
         const addeduser = await User.create(user);
         res.send(`Create User with id: ${addeduser}`);
+    }
+    catch (err) {
+        console.log(err);
+    }
+})
+
+// login
+router.post("/users/login", async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await User.findOne({ email: email });
+        if (!user) {
+            res.send("User does not exist");
+        }
+        const isValid = await user.comparePassword(password)
+
+        if (!isValid) {
+            res.status(400).send("Password is incorrect");
+        }
+        else {
+            res.send("User is logged in");
+        }
     }
     catch (err) {
         console.log(err);
